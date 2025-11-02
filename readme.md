@@ -1,0 +1,1 @@
+I want to make a crm in the terminal where I can add a company, import data from an api, update the status
