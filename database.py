@@ -81,3 +81,73 @@ def insert_visit (contact_id, appointment_date, comment):
     connection.close()
 
     return contact_id
+
+def get_recent_visits(limit=10):
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    cursor.execute('''
+                   SELECT c.name, v.appointment_date, v.comment
+                   FROM visits v 
+                   JOIN contacts c ON v.contact_id = c.id
+                   ORDER BY v.appointment_date DESC
+                   LIMIT ?
+    ''', (limit,))
+
+    results = cursor.fetchall()
+    connection.close()
+
+    return results
+
+def get_visits_for_contact(contact_id):
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    cursor.execute('''
+        SELECT appointment_date, comment
+        FROM visits
+        WHERE contact_id = ?
+        ORDER BY appointment_date DESC
+    ''', (contact_id,))
+
+    results = cursor.fetchall()
+    connection.close()
+
+    return results
+
+def get_least_visited_contacts(limit=10):
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    cursor.execute('''
+        SELECT c.id, c.name, c.email, c.company, COUNT(v.id) as visit_count
+        FROM contacts c
+        LEFT JOIN visits v ON c.id = v.contact_id
+        GROUP BY c.id
+        ORDER BY visit_count ASC
+        LIMIT ?
+    ''', (limit,))
+
+    results = cursor.fetchall()
+    connection.close()
+
+    return results
+
+
+def get_email_suggestion():
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    cursor.execute('''
+        SELECT c.id, c.name, c.email, c.company, COUNT(v.id) as visit_count, MAX(v.appointment_date) as last_visit
+        FROM contacts c
+        LEFT JOIN visits v ON c.id = v.contact_id
+        GROUP BY c.id
+        ORDER BY visit_count ASC, last_visit ASC
+        LIMIT 1           
+    ''')
+
+    result = cursor.fetchone()
+    connection.close()
+
+    return result
