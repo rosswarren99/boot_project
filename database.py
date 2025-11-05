@@ -151,3 +151,27 @@ def get_email_suggestion():
     connection.close()
 
     return result
+
+def delete_contact(contact_id):
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    cursor.execute('DELETE FROM visits WHERE contact_id  = ?', (contact_id,))
+
+    cursor.execute('DELETE FROM contacts WHERE id = ?', (contact_id,))
+
+    connection.commit()
+    connection.close()
+
+def edit_contact(contact_id, name, email, company):
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    cursor.execute('''
+                   UPDATE contacts
+                   SET name = ?, email = ?, company = ?
+                   WHERE id = ?
+    ''', (name, email, company, contact_id))
+
+    connection.commit()
+    connection.close()

@@ -102,6 +102,47 @@ def getEmailSuggestion():
     print(f"Total Visits: {visit_count}")
     print(f"Last Visit: {last_visit if last_visit else 'Never'}")
 
+def deleteContact():
+    contact_name = input("Enter contact name to delete: ")
+    contact_id = database.get_contact_by_name(contact_name)
+
+    if contact_id is None:
+        print("Contact not found!")
+        return
+    
+    confirm = input(f"Are you sure you want to delete {contact_name}? (yes/no): ")
+
+    if confirm.lower() == "yes":
+        database.delete_contact(contact_id)
+        print(f"{contact_name} has been deleted")
+    else:
+        print("Delete Cancelled")
+def editContact():
+    contact_name = input("Enter contact name to edit: ")
+    contact_id = database.get_contact_by_name(contact_name)
+
+    if contact_id is None:
+        print("Contact not found")
+        return
+    
+    print(f"\nEditing {contact_name}. Leave blank to keep current value.")
+
+    new_name = input("New name (or press Enter to skip): ") or contact_name
+    new_email = input("New email (or press Enter to skip): ")
+    new_company = input("New company (or press Enter to skip): ")
+
+    if not new_email or not new_company:
+        connection = database.create_connection()
+        cursor = connection.cursor()
+        cursor.execute('SELECT email, company FROM contacts where id = ?', (contact_id))
+        current = cursor.fetchone()
+        connection.close()
+
+        new_email = new_email or current[0]
+        new_company = new_company or current[1]
+    
+    database.edit_contact(contact_id, new_name, new_email, new_company)
+    print(f"Contact updated!")
 
 while True:
     print("\n --- CRM MENU ---")
@@ -111,7 +152,9 @@ while True:
     print("4. View Number of Visits for Client")
     print("5. View Number of Least Visited Clients ")
     print("6. Email Reachout Suggestion")
-    print("7. Exit")
+    print("7. Delete a contact")
+    print("8. Edit a contact")
+    print("9. Exit")
 
     choice = input("Choose an option: ")
 
@@ -128,6 +171,10 @@ while True:
     elif choice == "6":
         getEmailSuggestion()
     elif choice == "7":
+        deleteContact()
+    elif choice == "8":
+        editContact()
+    elif choice == "9":
         break
     else:
         print("Invalid choice, try again")
