@@ -175,3 +175,34 @@ def edit_contact(contact_id, name, email, company):
 
     connection.commit()
     connection.close()
+
+def search_contacts(search_term, search_by):
+    connection = create_connection()
+    cursor = connection.cursor()
+
+    if search_by == "name":
+        cursor.execute('''
+                SELECT id, name, email, company
+                FROM contacts
+                WHERE name LIKE?
+                ORDER BY name
+            ''',(f'%{search_term}%',))
+    elif search_by == "email":
+        cursor.execute('''
+                SELECT id, name, email, company
+                FROM contacts
+                WHERE email LIKE?
+                ORDER BY name
+            ''',(f'%{search_term}%',))
+    elif search_by == "company":
+        cursor.execute('''
+                SELECT id, name, email, company
+                FROM contacts
+                WHERE company LIKE?
+                ORDER BY name
+            ''',(f'%{search_term}%',))
+
+    results = cursor.fetchall()
+    connection.close()
+
+    return results

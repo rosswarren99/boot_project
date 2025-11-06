@@ -144,6 +144,36 @@ def editContact():
     database.edit_contact(contact_id, new_name, new_email, new_company)
     print(f"Contact updated!")
 
+def searchContacts():
+    print("\nSearch by:")
+    print("1. Name")
+    print("2. Email")
+    print("3. Company")
+
+    search_choice = input("Choose search type (1-3): ")
+
+    if search_choice == "1":
+        search_by = "name"
+    elif search_choice == "2":
+        search_by = "email"
+    elif search_choice == "3":
+        search_by = "company"
+    else:
+        print("Invalid choice!")
+        return 
+    
+    search_term = input(f"Enter {search_by} to search: ")
+    results = database.search_contacts(search_term, search_by)
+
+    if not results:
+        print(f"No contacts found matching '{search_term}'")
+        return
+    
+    print(f"\n --- Search Results ({len(results)}) found) ---")
+    for contact_id, name, email, company in results:
+        print(f"ID: {contact_id} | {name} | {email} | {company}")
+
+
 while True:
     print("\n --- CRM MENU ---")
     print("1. Add a contact")
@@ -154,7 +184,8 @@ while True:
     print("6. Email Reachout Suggestion")
     print("7. Delete a contact")
     print("8. Edit a contact")
-    print("9. Exit")
+    print("9. Search")
+    print("10. Exit")
 
     choice = input("Choose an option: ")
 
@@ -175,6 +206,8 @@ while True:
     elif choice == "8":
         editContact()
     elif choice == "9":
+        searchContacts()
+    elif choice == "10":
         break
     else:
         print("Invalid choice, try again")
