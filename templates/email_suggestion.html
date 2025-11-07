@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Email Suggestion - CRM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .suggestion-box {
+            background-color: #d4edda;
+            border: 2px solid #28a745;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .suggestion-box h2 {
+            color: #28a745;
+            margin-top: 0;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .label {
+            font-weight: bold;
+            color: #333;
+        }
+        .value {
+            color: #555;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .no-data {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Email Suggestion</h1>
+    
+    {% if suggestion %}
+        <div class="suggestion-box">
+            <h2>✉️ You should reach out to:</h2>
+            
+            <div class="info-row">
+                <span class="label">Name:</span>
+                <span class="value">{{ suggestion.name }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="label">Email:</span>
+                <span class="value">{{ suggestion.email }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="label">Company:</span>
+                <span class="value">{{ suggestion.company }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="label">Total Visits:</span>
+                <span class="value">{{ suggestion.visit_count }}</span>
+            </div>
+            
+            <div class="info-row">
+                <span class="label">Last Visit:</span>
+                <span class="value">{{ suggestion.last_visit if suggestion.last_visit else 'Never' }}</span>
+            </div>
+        </div>
+    {% else %}
+        <div class="no-data">No contacts found. Add some contacts first!</div>
+    {% endif %}
+    
+    <br>
+    <a href="/">← Back to Home</a>
+</body>
+</html>

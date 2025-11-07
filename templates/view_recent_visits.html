@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recent Visits - CRM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .no-data {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>10 Most Recent Visits</h1>
+    
+    {% if visits %}
+        <table>
+            <tr>
+                <th>Contact Name</th>
+                <th>Date</th>
+                <th>Days Ago</th>
+                <th>Comment</th>
+            </tr>
+            {% for name, date, days_ago, comment in visits %}
+                <tr>
+                    <td>{{ name }}</td>
+                    <td>{{ date }}</td>
+                    <td>{{ days_ago }}</td>
+                    <td>{{ comment }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <div class="no-data">No visits recorded yet.</div>
+    {% endif %}
+    
+    <br>
+    <a href="/">← Back to Home</a>
+</body>
+</html>

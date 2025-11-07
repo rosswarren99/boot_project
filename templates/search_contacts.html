@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Contacts - CRM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        input, select {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #28a745;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .error {
+            color: red;
+            padding: 10px;
+            background-color: #f8d7da;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .info {
+            padding: 10px;
+            background-color: #d1ecf1;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .no-data {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Contacts</h1>
+    
+    <form method="POST">
+        <select name="search_by" required>
+            <option value="">-- Select Search Type --</option>
+            <option value="name">Search by Name</option>
+            <option value="email">Search by Email</option>
+            <option value="company">Search by Company</option>
+        </select>
+        
+        <input type="text" name="search_term" placeholder="Enter search term" required>
+        <button type="submit">Search</button>
+    </form>
+    
+    {% if error %}
+        <div class="error">{{ error }}</div>
+    {% endif %}
+    
+    {% if results %}
+        <div class="info">
+            Found {{ results|length }} contact(s) matching your search
+        </div>
+        
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Company</th>
+            </tr>
+            {% for contact_id, name, email, company in results %}
+                <tr>
+                    <td>{{ name }}</td>
+                    <td>{{ email }}</td>
+                    <td>{{ company }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% elif search_term %}
+        <div class="no-data">No contacts found matching "{{ search_term }}"</div>
+    {% else %}
+        <div class="no-data">Enter search criteria above</div>
+    {% endif %}
+    
+    <br>
+    <a href="/">← Back to Home</a>
+</body>
+</html>
