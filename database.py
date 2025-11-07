@@ -1,5 +1,6 @@
 #creating the database to connect the app to, obviously need sqlite3
 import sqlite3
+from datetime import datetime
 
 #below function creates the connection, it does not have a paramter
 def create_connection():
@@ -206,3 +207,11 @@ def search_contacts(search_term, search_by):
     connection.close()
 
     return results
+
+
+def validate_date(date_string):
+    try:
+        datetime.strptime(date_string, "%m/%d/%y")
+        return True
+    except ValueError:
+        return False

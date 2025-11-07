@@ -21,7 +21,13 @@ def contactCardCreate():
 
 def insertVisit():
     visitName = input("Who did you visit? ")
-    visitDate = input("On what day? ")
+    while True:
+        visitDate = input("On what day? (MM/DD/YY): ")
+        if database.validate_date(visitDate):
+            break
+        else:
+            print("Invalid date format! Please use MM/DD/YY (e.g. 10/07/2025)")
+
     visitDescription = input("Describe the meeting: ")
     
     contact_id = database.get_contact_by_name(visitName)
